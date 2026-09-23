@@ -3,8 +3,8 @@ services:
     name: signal-lost
     runtime: node
     plan: free
-    buildCommand: node --test test.js reconnect.test.js
-    startCommand: node server.js
+    buildCommand: npm test
+    startCommand: npm start
     healthCheckPath: /
     envVars:
       - key: NODE_VERSION
