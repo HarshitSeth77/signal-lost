@@ -129,3 +129,39 @@ body[data-theme="solar"] .stars { background: radial-gradient(ellipse at 12% 10%
 @keyframes crew-bob { to { transform: translateY(-3px); } }
 @keyframes exit-pulse { to { box-shadow: inset 0 0 25px color-mix(in srgb,var(--mint) 30%,transparent),0 0 18px color-mix(in srgb,var(--mint) 20%,transparent); } }
 @media (max-width: 600px) { .costume-grid { grid-template-columns: repeat(2,1fr); } .ship-maze { gap: 2px; padding: 5px; } .crew-dot { width: 19px; height: 23px; font-size: 8px; } }
+
+.landing-actions { max-width: 1380px; margin: 18px auto; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.landing-actions button,.landing-actions a { border: 1px solid var(--line); background: #0d1822; color: var(--text); padding: 12px 18px; border-radius: 30px; text-decoration: none; font: 11px monospace; }
+.landing-actions a:hover,.landing-actions button:hover { border-color: var(--mint); color: var(--mint); }
+.landing-info { margin: 70px 0 22px; padding: 60px; border-radius: 18px; text-align: center; background: radial-gradient(circle at 50% 0,color-mix(in srgb,var(--mint) 18%,transparent),transparent 60%),#0b141e; border: 1px solid var(--line); }
+.landing-info h2 { font-size: clamp(40px,6vw,72px); }
+.landing-info p { max-width: 720px; margin: auto; color: var(--muted); font-size: 18px; }
+.feature-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 45px; }
+.feature-cards article { border: 1px solid var(--line); border-radius: 14px; padding: 28px; background: #0c1620; }
+.feature-cards b { color: var(--orange); font: 12px monospace; }
+.feature-cards h3 { font: 25px 'Barlow Condensed',Impact,sans-serif; }
+.feature-cards p { color: var(--muted); }
+.auth-layer { position: fixed; inset: 0; z-index: 250; background: #02070dea; backdrop-filter: blur(12px); display: grid; place-items: center; padding: 18px; }
+.auth-card { width: min(470px,100%); position: relative; }
+.auth-card input { margin-top: 12px; }
+.auth-close { position: absolute; right: 18px; top: 18px; color: white; background: transparent; border: 0; }
+.auth-switch { display: block; margin: 16px auto; background: transparent; color: var(--mint); border: 0; }
+.outfit-balance { display: flex; justify-content: center; align-items: center; gap: 14px; color: var(--muted); font: 11px monospace; }
+.outfit-balance b { color: var(--orange); font-size: 16px; }
+.outfit-balance button { border: 1px solid var(--orange); background: #2b1b14; color: var(--orange); padding: 8px 12px; border-radius: 6px; font: 10px monospace; }
+.costume-card.unaffordable { opacity: .55; border-style: dashed; }
+.crew-dot.royal,.suit.royal { background: linear-gradient(145deg,#fff3a5,#d5981c); border-color: white; box-shadow: 0 0 20px #ffd45c; }
+.crew-dot.phantom,.suit.phantom { background: linear-gradient(145deg,#f5ffff55,#53cfd3aa); color: white; border-color: #dfffff; box-shadow: 0 0 24px #7dffff; backdrop-filter: blur(3px); }
+.ship-maze { transform: rotateX(7deg); transform-origin: center bottom; box-shadow: 0 35px 70px #0009,inset 0 0 50px #000; }
+.maze-cell.wall { transform: translateZ(14px); border-bottom-width: 5px; }
+.crew-dot { animation: crew-warp .32s ease-out,crew-bob .7s .32s ease-in-out infinite alternate; }
+@keyframes crew-warp { from { opacity: .2; transform: scale(.3) translateY(12px); filter: blur(5px); } }
+
+.victory-sky { position: fixed; inset: 0; z-index: 80; pointer-events: none; overflow: hidden; }
+.rocket { position: absolute; bottom: -30px; width: 4px; height: 34px; border-radius: 50%; background: white; box-shadow: 0 15px 15px var(--orange); animation: rocket-launch 1.6s ease-in forwards; }
+.rocket.r1 { left: 22%; }.rocket.r2 { left: 50%; animation-delay: .45s }.rocket.r3 { left: 78%; animation-delay: .8s }
+.firework { position: absolute; width: 9px; height: 9px; border-radius: 50%; opacity: 0; box-shadow: 0 -70px var(--mint),50px -50px var(--orange),70px 0 #fff,50px 50px #ff72c7,0 70px #ffe08a,-50px 50px var(--mint),-70px 0 var(--orange),-50px -50px white; animation: firework-burst 1.2s ease-out infinite; }
+.firework.f1 { left: 22%; top: 28%; animation-delay: 1.45s }.firework.f2 { left: 50%; top: 18%; animation-delay: 1.9s }.firework.f3 { left: 78%; top: 32%; animation-delay: 2.25s }
+@keyframes rocket-launch { to { transform: translateY(-75vh); opacity: 0; } }
+@keyframes firework-burst { 0% { opacity: 0; transform: scale(.05); } 20% { opacity: 1; } 100% { opacity: 0; transform: scale(1.5) rotate(20deg); } }
+@media (max-width: 800px) { .feature-cards { grid-template-columns: 1fr; } .landing-info { padding: 35px 22px; } }

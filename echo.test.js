@@ -28,9 +28,13 @@ test('Echo Loop: multiplayer levels, themes, tokens, hints, voice signaling and 
     throw Error('maze path missing');
   }
   try{
-    const a=(await api('create',{name:'Nova'})).data,b=(await api('join',{name:'Echo',room:a.room})).data;
+    const signup=await api('signup',{username:'nova_pilot',password:'echo123'});assert.equal(signup.status,200);
+    assert.equal((await api('signup',{username:'nova_pilot',password:'echo123'})).status,409);
+    assert.equal((await api('login',{username:'nova_pilot',password:'wrong12'})).status,401);
+    const login=await api('login',{username:'nova_pilot',password:'echo123'});assert.equal(login.status,200);
+    const a=(await api('create',{name:'Nova',accountToken:login.data.accountToken})).data,b=(await api('join',{name:'Echo',room:a.room})).data;
     const pa=await events(a),pb=await events(b);await wait(()=>pa.state&&pb.state);
-    assert.equal(pa.state.tokens,20);assert.equal(pa.state.tokenVault,100000000);
+    assert.equal(pa.state.tokens,20);assert.equal(pa.state.account,'nova_pilot');assert.equal(pa.state.tokenVault,100000000);
     await api('theme',{...a,value:'violet'});await wait(()=>pb.state.theme==='violet');
     await api('difficulty',{...a,value:'void'});await wait(()=>pb.state.difficulty==='void');
     await api('checkout',a);await wait(()=>pa.state.tokens===120);assert.equal(pa.state.tokenVault,99999900);
