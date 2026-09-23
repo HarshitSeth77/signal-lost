@@ -22,6 +22,11 @@ test('Echo Loop: multiplayer levels, themes, tokens, hints, voice signaling and 
     if(task.puzzle.type==='cipher')return clue.replace('Echo cipher: ','').split(' → ');
     return [clue.replace('Final directive: ','')];
   }
+  function path(from,to,escape){
+    const key=p=>p.join(','),blocked=new Set(escape.walls.map(key)),queue=[[from,[]]],seen=new Set([key(from)]);
+    while(queue.length){const [p,moves]=queue.shift();if(key(p)===key(to))return moves;for(const move of [[0,-1],[0,1],[-1,0],[1,0]]){const next=[p[0]+move[0],p[1]+move[1]],k=key(next);if(next[0]>=0&&next[1]>=0&&next[0]<escape.cols&&next[1]<escape.rows&&!blocked.has(k)&&!seen.has(k)){seen.add(k);queue.push([next,[...moves,move]])}}}
+    throw Error('maze path missing');
+  }
   try{
     const a=(await api('create',{name:'Nova'})).data,b=(await api('join',{name:'Echo',room:a.room})).data;
     const pa=await events(a),pb=await events(b);await wait(()=>pa.state&&pb.state);
@@ -46,7 +51,14 @@ test('Echo Loop: multiplayer levels, themes, tokens, hints, voice signaling and 
       await wait(()=>pa.state.phase!=='playing');if(loop<3)await api('rewind',a);
     }
     assert.deepEqual(levelTypes,['sequence','cipher','decision']);
-    assert.equal(pa.state.result,'escaped');assert.equal(pa.state.discoveries.length,3);
+    await api('rewind',a);await wait(()=>pa.state.phase==='playing'&&pa.state.loop===4&&pb.state.loop===4);
+    await api('checkout',b);await api('costume',{...a,value:'neon'});await api('costume',{...b,value:'void'});await wait(()=>pa.state.escape.customizeUntil<=pa.state.serverTime);
+    assert.equal(pa.state.tokens,95);assert.equal(pb.state.tokens,95);
+    const rendezvous=[4,3];
+    for(const [peer,session] of [[pa,a],[pb,b]])for(const [dx,dy] of path(peer.state.escape.players.find(x=>x.id===peer.state.you).pos,rendezvous,peer.state.escape)){await api('move',{...session,dx,dy});await new Promise(r=>setTimeout(r,6))}
+    await wait(()=>pa.state.escape.unlocked);
+    for(const [peer,session] of [[pa,a],[pb,b]])for(const [dx,dy] of path(peer.state.escape.players.find(x=>x.id===peer.state.you).pos,peer.state.escape.exit,peer.state.escape)){await api('move',{...session,dx,dy});await new Promise(r=>setTimeout(r,6))}
+    await wait(()=>pa.state.phase==='finished');assert.equal(pa.state.result,'escaped');assert.equal(pa.state.discoveries.length,4);
     await api('replay',a);await wait(()=>pb.state.phase==='lobby');assert.equal(pb.state.loop,0);
   }finally{
     controllers.forEach(x=>x.abort());server.closeAllConnections();await new Promise(r=>server.close(r));
