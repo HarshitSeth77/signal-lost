@@ -44,18 +44,18 @@ test('Echo Loop: multiplayer levels, themes, tokens, hints, voice signaling and 
     for(let i=0;i<3;i++)await api('tutorialStep',a);await wait(()=>pa.state.phase==='lobby');
     await api('ready',a);await api('ready',b);await api('start',a);await wait(()=>pa.state.phase==='playing');
     const levelTypes=[];
-    for(let loop=1;loop<=3;loop++){
-      await wait(()=>pa.state.phase==='playing'&&pb.state.phase==='playing'&&pa.state.loop===loop&&pb.state.loop===loop);
-      levelTypes.push(pa.state.task.puzzle.type);
-      if(loop===1){await api('hint',a);await wait(()=>pa.state.task.puzzle.hint);assert.equal(pa.state.tokens,110)}
-      for(const [self,other,session] of [[pa,pb,a],[pb,pa,b]]){
-        const task=self.state.task,clue=other.state.intel[0].text;
-        assert.equal((await api('solve',{...session,task:task.id,value:solution(task,clue)})).status,200);
-      }
-      await wait(()=>pa.state.phase!=='playing');if(loop<3)await api('rewind',a);
-    }
-    assert.deepEqual(levelTypes,['sequence','cipher','decision']);
-    await api('rewind',a);await wait(()=>pa.state.phase==='playing'&&pa.state.loop===4&&pb.state.loop===4);
+    async function stage(number){await wait(()=>pa.state.phase==='playing'&&pb.state.phase==='playing'&&pa.state.loop===number&&pb.state.loop===number);levelTypes.push(pa.state.task.puzzle.type)}
+    async function solvePair(){for(const [self,other,session] of [[pa,pb,a],[pb,pa,b]]){const task=self.state.task,clue=other.state.intel[0].text;assert.equal((await api('solve',{...session,task:task.id,value:solution(task,clue)})).status,200)}await wait(()=>pa.state.phase!=='playing')}
+    async function next(){assert.equal((await api('rewind',a)).status,200)}
+    await stage(1);await api('hint',a);await wait(()=>pa.state.task.puzzle.hint);assert.equal(pa.state.tokens,110);await solvePair();await next();
+    await stage(2);assert.equal(pa.state.mini.isDriver,true);assert.equal(pb.state.mini.isDriver,false);for(const [dx,dy] of path(pa.state.mini.position,pa.state.mini.exit,pb.state.mini))assert.equal((await api('mini-move',{...a,dx,dy})).status,200);await wait(()=>pa.state.phase!=='playing');await next();
+    await stage(3);await solvePair();await next();
+    await stage(4);assert.equal((await api('split-pulse',a)).status,200);assert.equal((await api('split-pulse',b)).status,200);await wait(()=>pa.state.phase!=='playing');await next();
+    await stage(5);assert.equal((await api('transmit',{...a,value:pa.state.mini.privateCode})).status,200);assert.equal((await api('transmit',{...b,value:pb.state.mini.privateCode})).status,200);await wait(()=>pa.state.mini.phase==='vote');const corrupted=pa.state.mini.isCorrupted?pa.state.you:pb.state.you;assert.equal((await api('vote',{...a,target:corrupted})).status,200);assert.equal((await api('vote',{...b,target:corrupted})).status,200);await wait(()=>pa.state.phase!=='playing');await next();
+    await stage(6);await solvePair();await next();
+    await stage(7);for(const [peer,session] of [[pa,a],[pb,b]]){const hunt={...peer.state.mini,walls:[...peer.state.mini.walls,[4,2]]};for(const [dx,dy] of path(peer.state.mini.players.find(x=>x.id===peer.state.you).pos,peer.state.mini.exit,hunt))assert.equal((await api('mini-move',{...session,dx,dy})).status,200)}await wait(()=>pa.state.phase!=='playing');await next();
+    assert.deepEqual(levelTypes,['sequence','blind','cipher','split','impostor','decision','soundhunt']);
+    await stage(8);
     await api('checkout',b);assert.equal((await api('select-costume',{...a,value:'neon'})).status,200);assert.equal((await api('select-costume',{...b,value:'void'})).status,200);await wait(()=>pa.state.escape.customizeUntil<=pa.state.serverTime);
     assert.equal(pa.state.escape.players.find(x=>x.id===pa.state.you).costume,'neon');assert.equal(pb.state.escape.players.find(x=>x.id===pb.state.you).costume,'void');
     assert.equal(pa.state.tokens,95);assert.equal(pb.state.tokens,95);
@@ -63,7 +63,7 @@ test('Echo Loop: multiplayer levels, themes, tokens, hints, voice signaling and 
     for(const [peer,session] of [[pa,a],[pb,b]])for(const [dx,dy] of path(peer.state.escape.players.find(x=>x.id===peer.state.you).pos,rendezvous,peer.state.escape)){await api('move',{...session,dx,dy});await new Promise(r=>setTimeout(r,6))}
     await wait(()=>pa.state.escape.unlocked);
     for(const [peer,session] of [[pa,a],[pb,b]])for(const [dx,dy] of path(peer.state.escape.players.find(x=>x.id===peer.state.you).pos,peer.state.escape.exit,peer.state.escape)){await api('move',{...session,dx,dy});await new Promise(r=>setTimeout(r,6))}
-    await wait(()=>pa.state.phase==='finished');assert.equal(pa.state.result,'escaped');assert.equal(pa.state.discoveries.length,4);
+    await wait(()=>pa.state.phase==='finished');assert.equal(pa.state.result,'escaped');assert.equal(pa.state.discoveries.length,8);assert.equal(pa.state.maxLoops,8);
     await api('replay',a);await wait(()=>pb.state.phase==='lobby');assert.equal(pb.state.loop,0);
   }finally{
     controllers.forEach(x=>x.abort());server.closeAllConnections();await new Promise(r=>server.close(r));
