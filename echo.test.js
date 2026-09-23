@@ -28,7 +28,7 @@ test('Echo Loop: multiplayer levels, themes, tokens, hints, voice signaling and 
     throw Error('maze path missing');
   }
   try{
-    const signup=await api('signup',{username:'nova_pilot',password:'echo123'});assert.equal(signup.status,200);
+    const signup=await api('signup',{username:'nova_pilot',password:'echo123'});assert.equal(signup.status,200);assert.match(signup.data.pilotId,/^SL-[A-F0-9]{8}$/);
     assert.equal((await api('signup',{username:'nova_pilot',password:'echo123'})).status,409);
     assert.equal((await api('login',{username:'nova_pilot',password:'wrong12'})).status,401);
     const login=await api('login',{username:'nova_pilot',password:'echo123'});assert.equal(login.status,200);
@@ -56,7 +56,8 @@ test('Echo Loop: multiplayer levels, themes, tokens, hints, voice signaling and 
     }
     assert.deepEqual(levelTypes,['sequence','cipher','decision']);
     await api('rewind',a);await wait(()=>pa.state.phase==='playing'&&pa.state.loop===4&&pb.state.loop===4);
-    await api('checkout',b);await api('costume',{...a,value:'neon'});await api('costume',{...b,value:'void'});await wait(()=>pa.state.escape.customizeUntil<=pa.state.serverTime);
+    await api('checkout',b);assert.equal((await api('select-costume',{...a,value:'neon'})).status,200);assert.equal((await api('select-costume',{...b,value:'void'})).status,200);await wait(()=>pa.state.escape.customizeUntil<=pa.state.serverTime);
+    assert.equal(pa.state.escape.players.find(x=>x.id===pa.state.you).costume,'neon');assert.equal(pb.state.escape.players.find(x=>x.id===pb.state.you).costume,'void');
     assert.equal(pa.state.tokens,95);assert.equal(pb.state.tokens,95);
     const rendezvous=[4,3];
     for(const [peer,session] of [[pa,a],[pb,b]])for(const [dx,dy] of path(peer.state.escape.players.find(x=>x.id===peer.state.you).pos,rendezvous,peer.state.escape)){await api('move',{...session,dx,dy});await new Promise(r=>setTimeout(r,6))}

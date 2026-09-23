@@ -113,7 +113,8 @@ body[data-theme="solar"] .stars { background: radial-gradient(ellipse at 12% 10%
 .crew-dot.void,.suit.void { background: #bf8cff; border-color: #eadbff; box-shadow: 0 0 18px #a45cff; }
 .crew-dot.solar,.suit.solar { background: #ff9b45; border-color: #ffe1bd; box-shadow: 0 0 18px #ff6b32; }
 .move-pad { width: 190px; margin: 18px auto; display: grid; grid-template-columns: repeat(3,1fr); gap: 7px; }
-.move-pad button { min-height: 48px; border: 1px solid var(--line); background: #142431; color: var(--mint); border-radius: 8px; font-size: 18px; }
+.move-pad button { min-height: 56px; border: 1px solid var(--line); background: #142431; color: var(--mint); border-radius: 10px; font-size: 21px; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+.move-pad button:active { transform: scale(.92); background: color-mix(in srgb,var(--mint) 20%,#142431); box-shadow: 0 0 20px color-mix(in srgb,var(--mint) 30%,transparent); }
 .move-pad button:first-child { grid-column: 2; }
 .maze-help { text-align: center; }
 .outfit-bay { text-align: center; padding: 10px; }
@@ -130,9 +131,19 @@ body[data-theme="solar"] .stars { background: radial-gradient(ellipse at 12% 10%
 @keyframes exit-pulse { to { box-shadow: inset 0 0 25px color-mix(in srgb,var(--mint) 30%,transparent),0 0 18px color-mix(in srgb,var(--mint) 20%,transparent); } }
 @media (max-width: 600px) { .costume-grid { grid-template-columns: repeat(2,1fr); } .ship-maze { gap: 2px; padding: 5px; } .crew-dot { width: 19px; height: 23px; font-size: 8px; } }
 
-.landing-actions { max-width: 1380px; margin: 18px auto; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.landing-actions { max-width: 1380px; margin: 0 auto 18px; display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
+.top-nav { position: relative; z-index: 8; padding: 4px 2px; }
 .landing-actions button,.landing-actions a { border: 1px solid var(--line); background: #0d1822; color: var(--text); padding: 12px 18px; border-radius: 30px; text-decoration: none; font: 11px monospace; }
 .landing-actions a:hover,.landing-actions button:hover { border-color: var(--mint); color: var(--mint); }
+.pilot-profile { display: inline-flex; align-items: center; gap: 8px; }
+.pilot-profile span,.profile-avatar { display: grid; place-items: center; border-radius: 50%; background: var(--mint); color: #06100e; font-weight: 900; box-shadow: 0 0 16px color-mix(in srgb,var(--mint) 55%,transparent); }
+.pilot-profile span { width: 24px; height: 24px; }
+.profile-avatar { width: 84px; height: 84px; margin: 25px auto 12px; font-size: 34px; }
+.profile-card { text-align: center; }
+.pilot-id { margin: 22px 0; padding: 15px; border: 1px dashed var(--mint); border-radius: 9px; }
+.pilot-id small,.pilot-id strong { display: block; }
+.pilot-id small { color: var(--muted); font: 9px monospace; letter-spacing: 2px; }
+.pilot-id strong { margin-top: 7px; color: var(--mint); font: 20px monospace; letter-spacing: 2px; }
 .landing-info { margin: 70px 0 22px; padding: 60px; border-radius: 18px; text-align: center; background: radial-gradient(circle at 50% 0,color-mix(in srgb,var(--mint) 18%,transparent),transparent 60%),#0b141e; border: 1px solid var(--line); }
 .landing-info h2 { font-size: clamp(40px,6vw,72px); }
 .landing-info p { max-width: 720px; margin: auto; color: var(--muted); font-size: 18px; }
@@ -164,4 +175,4 @@ body[data-theme="solar"] .stars { background: radial-gradient(ellipse at 12% 10%
 .firework.f1 { left: 22%; top: 28%; animation-delay: 1.45s }.firework.f2 { left: 50%; top: 18%; animation-delay: 1.9s }.firework.f3 { left: 78%; top: 32%; animation-delay: 2.25s }
 @keyframes rocket-launch { to { transform: translateY(-75vh); opacity: 0; } }
 @keyframes firework-burst { 0% { opacity: 0; transform: scale(.05); } 20% { opacity: 1; } 100% { opacity: 0; transform: scale(1.5) rotate(20deg); } }
-@media (max-width: 800px) { .feature-cards { grid-template-columns: 1fr; } .landing-info { padding: 35px 22px; } }
+@media (max-width: 800px) { .feature-cards { grid-template-columns: 1fr; } .landing-info { padding: 35px 22px; } .landing-actions { justify-content: center; } .move-pad { width: min(240px,80vw); } .move-pad button { min-height: 64px; } }
