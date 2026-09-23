@@ -115,7 +115,10 @@ body[data-theme="solar"] .stars { background: radial-gradient(ellipse at 12% 10%
 .move-pad { width: 190px; margin: 18px auto; display: grid; grid-template-columns: repeat(3,1fr); gap: 7px; }
 .move-pad button { min-height: 56px; border: 1px solid var(--line); background: #142431; color: var(--mint); border-radius: 10px; font-size: 21px; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
 .move-pad button:active { transform: scale(.92); background: color-mix(in srgb,var(--mint) 20%,#142431); box-shadow: 0 0 20px color-mix(in srgb,var(--mint) 30%,transparent); }
-.move-pad button:first-child { grid-column: 2; }
+.move-pad button:nth-child(1) { grid-column: 2; grid-row: 1; }
+.move-pad button:nth-child(2) { grid-column: 1; grid-row: 2; }
+.move-pad button:nth-child(3) { grid-column: 2; grid-row: 2; }
+.move-pad button:nth-child(4) { grid-column: 3; grid-row: 2; }
 .maze-help { text-align: center; }
 .outfit-bay { text-align: center; padding: 10px; }
 .outfit-bay>strong { display: block; margin: 8px 0; color: var(--orange); font: 800 70px 'Barlow Condensed',Impact,sans-serif; }
