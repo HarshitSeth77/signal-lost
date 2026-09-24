@@ -1,5 +1,8 @@
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
+const fs=require('node:fs'),path=require('node:path'),os=require('node:os');
+const accountStore=path.join(os.tmpdir(),`signal-lost-accounts-${process.pid}.json`);
+process.env.ACCOUNT_STORE=accountStore;
 const {createServer}=require('./server-v2');
 
 test('Echo Loop: multiplayer levels, themes, tokens, hints, voice signaling and replay',async()=>{
@@ -29,9 +32,9 @@ test('Echo Loop: multiplayer levels, themes, tokens, hints, voice signaling and 
   }
   try{
     const signup=await api('signup',{username:'nova_pilot',password:'echo123'});assert.equal(signup.status,200);assert.match(signup.data.pilotId,/^SL-[A-F0-9]{8}$/);
-    assert.equal((await api('signup',{username:'nova_pilot',password:'echo123'})).status,409);
+    const duplicate=await api('signup',{username:'NOVA_PILOT',password:'echo123'});assert.equal(duplicate.status,409);assert.equal(duplicate.data.code,'USERNAME_TAKEN');assert.equal(duplicate.data.suggestions.length,2);assert.notEqual(duplicate.data.suggestions[0],duplicate.data.suggestions[1]);assert.equal(fs.existsSync(accountStore),true);
     assert.equal((await api('login',{username:'nova_pilot',password:'wrong12'})).status,401);
-    const login=await api('login',{username:'nova_pilot',password:'echo123'});assert.equal(login.status,200);
+    const login=await api('login',{username:'NOVA_PILOT',password:'echo123'});assert.equal(login.status,200);
     const a=(await api('create',{name:'Nova',accountToken:login.data.accountToken})).data,b=(await api('join',{name:'Echo',room:a.room})).data;
     const pa=await events(a),pb=await events(b);await wait(()=>pa.state&&pb.state);
     assert.equal(pa.state.tokens,20);assert.equal(pa.state.account,'nova_pilot');assert.equal(pa.state.tokenVault,100000000);
@@ -66,6 +69,6 @@ test('Echo Loop: multiplayer levels, themes, tokens, hints, voice signaling and 
     await wait(()=>pa.state.phase==='finished');assert.equal(pa.state.result,'escaped');assert.equal(pa.state.discoveries.length,8);assert.equal(pa.state.maxLoops,8);
     await api('replay',a);await wait(()=>pb.state.phase==='lobby');assert.equal(pb.state.loop,0);
   }finally{
-    controllers.forEach(x=>x.abort());server.closeAllConnections();await new Promise(r=>server.close(r));
+    controllers.forEach(x=>x.abort());server.closeAllConnections();await new Promise(r=>server.close(r));try{fs.unlinkSync(accountStore)}catch{}
   }
 });

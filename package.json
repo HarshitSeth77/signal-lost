@@ -1,1 +1,1 @@
-{"name":"signal-lost","version":"2.0.0","private":true,"scripts":{"start":"node server-v2.js","test":"node --test echo.test.js"}}
+{"name":"signal-lost","version":"2.0.0","private":true,"scripts":{"start":"node server-v2.js","test":"node --test echo.test.js"},"dependencies":{"pg":"^8.16.3"}}

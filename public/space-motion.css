@@ -252,3 +252,72 @@ body[data-theme="solar"] .stars { background: radial-gradient(ellipse at 12% 10%
   .reality-rings { width:145px; height:145px; }
   .sound-readout { gap:14px; }
 }
+
+/* Mature cinematic interface */
+:root { --bg:#06080b; --panel:#0c1117; --line:#29313a; --mint:#9eb8b1; --orange:#c9865a; --text:#e7e8e5; --muted:#818a94; }
+body { background:#06080b; color:var(--text); font-family:"Segoe UI Variable","Segoe UI",Arial,sans-serif; letter-spacing:.01em; }
+body:before { content:""; position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.18; background:repeating-linear-gradient(0deg,transparent 0 3px,#ffffff06 4px),linear-gradient(115deg,#7f9f9810,transparent 38%,#9c623b0b 75%,transparent); }
+body[data-theme="violet"] { --mint:#aaa3ba; --orange:#b27f98; --line:#37333e; }
+body[data-theme="solar"] { --mint:#bcb29b; --orange:#c77550; --line:#3c3730; }
+header { height:78px; background:#070a0ed9; backdrop-filter:blur(18px); border-bottom:1px solid #323840; }
+.brand { font-size:27px; color:var(--orange); }
+.brand span { font-family:"Arial Narrow","Segoe UI",sans-serif; font-size:19px; font-weight:700; letter-spacing:4px; }
+.tag,.eyebrow { font-family:"IBM Plex Mono","Cascadia Mono",monospace; font-size:10px; letter-spacing:2.4px; text-transform:uppercase; }
+.card,.access,.feature-cards article,.landing-info,.auth-card,.mini-shell { border-radius:3px; background:linear-gradient(145deg,#11171e 0%,#0a0f15 70%); border-color:#303943; box-shadow:0 28px 80px #0008,inset 0 1px #ffffff05; }
+.card { position:relative; }
+.card:before { content:""; position:absolute; left:-1px; top:20px; width:2px; height:38px; background:var(--orange); opacity:.75; }
+.echo-hero { border-radius:3px; border-color:#343d46; box-shadow:0 30px 100px #000a; }
+.echo-hero>img { filter:saturate(.6) contrast(1.1) brightness(.72); }
+.hero-shade { background:linear-gradient(0deg,#05070afc 3%,#05070ac9 52%,#05070a22 100%),linear-gradient(90deg,#05070a44,transparent); }
+.signal-chip { border:0; border-left:2px solid var(--orange); background:#090d12d9; color:#c7cbc8; padding:8px 13px; }
+.hero-copy h1 { font-family:"Arial Narrow","Segoe UI",sans-serif; font-weight:800; letter-spacing:-5px; }
+.hero-copy h1 span { color:#c4cbc8; }
+.hero-copy h1 em { color:var(--orange); font-weight:500; letter-spacing:12px; }
+.hero-copy p { color:#b3b8ba; font-size:17px; }
+.loop-line { color:#777f86; border-color:#353d44; }
+h2,.mission-top h1,.mini-mission h3,.costume-card b { font-family:"Arial Narrow","Segoe UI",sans-serif; text-transform:uppercase; letter-spacing:.035em; }
+h2 { font-weight:650; }
+button { border-radius:2px!important; text-transform:uppercase; letter-spacing:.08em; transition:transform .16s ease,border-color .16s ease,background .16s ease,color .16s ease; }
+.primary { background:#aebdb8; color:#09100e; box-shadow:none; }
+.primary:hover:not(:disabled) { background:#d1dbd7; }
+.secondary,.mode,.theme-dot,.voice-btn,.code-btn { background:#10161d; border-color:#333d47; }
+.landing-actions button,.landing-actions a { border-radius:2px; background:#0a0e13cc; padding:11px 16px; letter-spacing:1.4px; }
+.landing-info { text-align:left; padding:54px 60px; background:linear-gradient(120deg,#11171d,#090d12); }
+.landing-info h2 { max-width:850px; font-size:clamp(42px,6vw,76px); line-height:.95; letter-spacing:-.02em; }
+.landing-info p { margin:18px 0 0; font-size:16px; line-height:1.8; }
+.feature-cards article { min-height:190px; border-top:2px solid #353e46; }
+.feature-cards article:hover { border-top-color:var(--orange); transform:translateY(-4px); }
+.feature-cards h3 { font-family:"Arial Narrow","Segoe UI",sans-serif; letter-spacing:.06em; }
+input { border-radius:2px; border-color:#353e47; background:#070b10; padding:15px 14px; }
+input:focus { border-color:#aebdb8; box-shadow:0 0 0 1px #aebdb844; }
+.crew,.avatar,.mode,.loop-hud>div,.intel-card,.sequence-bank button,.route-map button,.mini-grid,.mini-cell,.costume-card { border-radius:2px; }
+.avatar { background:#171e24; border:1px solid #39434c; color:#bbc5c1; }
+.campaign-track { border-radius:2px; background:#080c11e8; }
+.campaign-track i { border-radius:1px; }
+.campaign-track i.done { background:#8fa59f; color:#050907; }
+.crew-dot,.suit { border-radius:35% 35% 24% 24%; filter:saturate(.75); }
+.click-spark { width:5px; height:5px; background:#c9d0cd; box-shadow:0 0 0 0 #c9d0cd,0 0 12px #c9d0cd; }
+.auth-layer { background:#030507f2; backdrop-filter:blur(20px) grayscale(.25); }
+.auth-card { width:min(520px,100%); padding:42px; border-top:2px solid var(--orange); }
+.auth-card:before { content:"IDENTITY NODE 07"; position:absolute; right:42px; bottom:18px; color:#515a62; font:8px "Cascadia Mono",monospace; letter-spacing:2px; }
+.auth-card h2 { font-size:42px; max-width:390px; line-height:1.05; margin:22px 0 10px; }
+.auth-lead { color:#929aa0; font-size:14px; line-height:1.7; margin:0 0 26px; }
+.auth-card label { display:block; margin:17px 0 7px; color:#7f8890; font:9px "Cascadia Mono",monospace; letter-spacing:2px; }
+.auth-card input { margin:0; }
+.auth-security { margin:24px 0 0; color:#59636b; font:8px "Cascadia Mono",monospace; letter-spacing:1.4px; }
+#auth-feedback { margin-top:14px; }
+#auth-feedback>p { margin:0; padding:11px 12px; border-left:2px solid var(--orange); background:#2b1711; color:#e0b49b; font-size:12px; }
+#auth-feedback>small { display:block; margin:14px 0 7px; color:#79838b; font:8px monospace; letter-spacing:2px; }
+.username-suggestions { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.username-suggestions button,.login-existing { min-height:42px; border:1px solid #46515a; background:#111820; color:#c7cfcc; font:11px monospace; }
+.login-existing { width:100%; margin-top:8px; color:var(--orange); border-color:#5e4232; }
+.profile-avatar,.pilot-profile span { background:#aebdb8; box-shadow:none; }
+.pilot-id { border-style:solid; border-color:#414b54; border-radius:2px; }
+#toast { border-radius:2px; background:#111820; border-color:#414c55; }
+dialog { border-radius:3px; background:#0c1117; }
+@media (max-width:700px) {
+  .auth-card { padding:32px 22px; }
+  .auth-card h2 { font-size:34px; }
+  .landing-info { padding:38px 24px; }
+  .hero-copy h1 { letter-spacing:-3px; }
+}
