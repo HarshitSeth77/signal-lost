@@ -8,9 +8,14 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
+[[headers]]
+  for = "/app.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
 [[redirects]]
   from = "/app.js"
-  to = "/app-v2.js"
+  to = "/app-v2.js?v=f1a2299"
   status = 200
   force = true
 
