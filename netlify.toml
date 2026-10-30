@@ -9,6 +9,12 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
 
 [[redirects]]
+  from = "/app.js"
+  to = "/app-v2.js"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
